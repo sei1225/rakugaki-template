@@ -1,0 +1,101 @@
+{
+  "name": "rakugaki",
+  "displayName": "VSCode統合AI提案システム",
+  "description": "Claude・Copilot統合によるプロジェクト全体理解型コード品質向上システム",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": ["Other", "Machine Learning"],
+  "keywords": [
+    "ai", "claude", "copilot", "suggestions", "workspace",
+    "code-quality", "typescript", "productivity", "analysis"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "rakugaki.suggestionView",
+          "name": "AI提案",
+          "when": "true"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "rakugaki.analyzeWorkspace",
+        "title": "ワークスペース全体分析",
+        "icon": "$(search)"
+      },
+      {
+        "command": "rakugaki.refreshAgents",
+        "title": "エージェント接続更新",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "rakugaki.toggleAnalysis",
+        "title": "分析機能の切り替え",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "rakugaki.showStats",
+        "title": "統計情報を表示",
+        "icon": "$(graph)"
+      }
+    ],
+    "configuration": {
+      "title": "AI提案システム設定",
+      "properties": {
+        "rakugaki.enabledCategories": {
+          "type": "array",
+          "default": ["記法改善", "パフォーマンス", "設計改善"],
+          "description": "有効にする提案カテゴリ"
+        },
+        "rakugaki.primaryAgent": {
+          "type": "string",
+          "enum": ["claude-chat", "copilot-chat", "auto"],
+          "default": "auto",
+          "description": "優先エージェント選択"
+        },
+        "rakugaki.analysisDepth": {
+          "type": "string",
+          "enum": ["light", "normal", "deep"],
+          "default": "normal",
+          "description": "分析の深度設定"
+        },
+        "rakugaki.suggestionDelay": {
+          "type": "number",
+          "default": 500,
+          "minimum": 100,
+          "maximum": 5000,
+          "description": "提案の遅延時間（ミリ秒）"
+        },
+        "rakugaki.enablePatternLearning": {
+          "type": "boolean",
+          "default": true,
+          "description": "プロジェクト固有パターンの学習を有効化"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.70.0",
+    "@types/node": "22.x",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "typescript": "^5.1.6"
+  }
+}
