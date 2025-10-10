@@ -21,7 +21,17 @@
         {
           "id": "rakugaki.suggestionView",
           "name": "AI提案",
-          "when": "true"
+          "when": "true",
+          "type": "webview"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "rakugaki",
+          "title": "AI提案",
+          "icon": "$(lightbulb)"
         }
       ]
     },
@@ -69,10 +79,10 @@
         },
         "rakugaki.suggestionDelay": {
           "type": "number",
-          "default": 500,
-          "minimum": 100,
-          "maximum": 5000,
-          "description": "提案の遅延時間（ミリ秒）"
+          "default": 1500,
+          "minimum": 500,
+          "maximum": 10000,
+          "description": "提案の遅延時間（ミリ秒） - 重複防止のため長めに設定"
         },
         "rakugaki.enablePatternLearning": {
           "type": "boolean",
