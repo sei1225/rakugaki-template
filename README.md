@@ -1,3 +1,7 @@
+## 免責事項
+
+これは一時的な共有用リポジトリです。本リポジトリの使用には一切の責任を持ちません。
+
 # Rakugaki - VSCode統合AI提案システム
 
 Claude Chat Extension・GitHub Copilot統合によるプロジェクト全体理解型コード品質向上システム
