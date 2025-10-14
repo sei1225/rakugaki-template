@@ -1,5 +1,7 @@
 import type React from 'react';
+import btnStyles from '../common.module.css';
 import type { Suggestion } from '../types';
+import styles from './SuggestionsList.module.css';
 
 interface SuggestionsListProps {
   suggestions: Suggestion[];
@@ -16,56 +18,72 @@ export const SuggestionsList: React.FC<SuggestionsListProps> = ({
 }) => {
   if (suggestions.length === 0) {
     return (
-      <div className="empty-state">
+      <div className={styles.emptyState}>
         <p>まだ提案はありません</p>
         <p>ファイルを編集すると、AI提案が表示されます</p>
       </div>
     );
   }
 
+  const getPriorityClass = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return styles.priorityHigh;
+      case 'medium':
+        return styles.priorityMedium;
+      case 'low':
+        return styles.priorityLow;
+      default:
+        return '';
+    }
+  };
+
   return (
-    <div className="suggestions-container">
+    <div className={styles.container}>
       {suggestions.map((suggestion) => (
         <div
           key={suggestion.id}
-          className={`suggestion priority-${suggestion.priority}`}
+          className={`${styles.suggestion} ${getPriorityClass(suggestion.priority)}`}
         >
-          <div className="suggestion-header">
-            <div className="suggestion-title">{suggestion.title}</div>
-            <div className="suggestion-category">{suggestion.category}</div>
+          <div className={styles.header}>
+            <div className={styles.title}>{suggestion.title}</div>
+            <div className={styles.category}>{suggestion.category}</div>
           </div>
-          <div className="suggestion-description">{suggestion.description}</div>
+          <div className={styles.description}>{suggestion.description}</div>
 
           {suggestion.codeExample && (
-            <div className="code-example">
-              <div className="code-label">変更前:</div>
-              <div className="code-before">
+            <div className={styles.codeExample}>
+              <div className={styles.codeLabel}>変更前:</div>
+              <div className={styles.codeBefore}>
                 <pre>{suggestion.codeExample.before}</pre>
               </div>
-              <div className="code-label">変更後:</div>
-              <div className="code-after">
+              <div className={styles.codeLabel}>変更後:</div>
+              <div className={styles.codeAfter}>
                 <pre>{suggestion.codeExample.after}</pre>
               </div>
             </div>
           )}
 
-          <div className="suggestion-actions">
+          <div className={styles.actions}>
             <button
-              className="btn discuss-btn"
+              type="button"
+              className={`${btnStyles.btn} ${btnStyles.btnDiscuss}`}
               onClick={() => onDiscuss(suggestion)}
             >
               💬 議論する
             </button>
             {suggestion.codeExample && (
               <button
-                className="btn btn-primary"
+                type="button"
+                className={`${btnStyles.btn} ${btnStyles.btnPrimary}`}
                 onClick={() => onApply(suggestion.id)}
               >
                 適用
               </button>
             )}
             <button
-              className="btn btn-secondary"
+              type="button"
+              className={`${btnStyles.btn} ${btnStyles.btnSecondary}`}
               onClick={() => onDismiss(suggestion.id)}
             >
               却下

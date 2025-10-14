@@ -1,0 +1,26 @@
+.btn {
+    padding: 6px 12px;
+    border: 1px solid var(--vscode-button-border);
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btnPrimary {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+}
+
+.btnSecondary {
+    background-color: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+}
+
+.btnDiscuss {
+    background-color: var(--vscode-textLink-foreground);
+    color: var(--vscode-editor-background);
+}
+
+.btn:hover {
+    opacity: 0.8;
+}

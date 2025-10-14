@@ -1,4 +1,5 @@
 const esbuild = require('esbuild');
+const cssModulesPlugin = require('esbuild-css-modules-plugin');
 
 const watch = process.argv.includes('--watch');
 
@@ -11,10 +12,18 @@ const buildOptions = {
   sourcemap: watch ? 'inline' : false,
   minify: !watch,
   external: ['vscode'],
+  plugins: [
+    cssModulesPlugin({
+      inject: false,
+      localsConvention: 'camelCaseOnly',
+      generateScopedName: watch
+        ? '[name]__[local]___[hash:base64:5]'
+        : '[hash:base64:8]',
+    }),
+  ],
   loader: {
     '.tsx': 'tsx',
     '.ts': 'ts',
-    '.css': 'css',
   },
   define: {
     'process.env.NODE_ENV': watch ? '"development"' : '"production"',

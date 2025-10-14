@@ -1,5 +1,6 @@
 import type React from 'react';
 import { useEffect, useState } from 'react';
+import styles from './App.module.css';
 import { DiscussionChat } from './components/DiscussionChat';
 import { SuggestionDetail } from './components/SuggestionDetail';
 import { SuggestionsList } from './components/SuggestionsList';
@@ -172,12 +173,12 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="app">
+    <div className={styles.app}>
       {view === 'list' ? (
         <div>
-          <div className="header">
+          <div className={styles.header}>
             <h3>AI提案</h3>
-            <div className="agent-status">エージェント接続中...</div>
+            <div className={styles.agentStatus}>エージェント接続中...</div>
           </div>
           <SuggestionsList
             suggestions={suggestions}

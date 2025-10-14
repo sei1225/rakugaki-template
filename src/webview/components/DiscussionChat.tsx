@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { DiscussionMessage, Suggestion } from '../types';
+import styles from './DiscussionChat.module.css';
 
 interface DiscussionChatProps {
   suggestion: Suggestion;
@@ -52,63 +53,70 @@ export const DiscussionChat: React.FC<DiscussionChatProps> = ({
   };
 
   return (
-    <div className="discussion-section">
+    <div className={styles.section}>
       <h4>この提案について議論</h4>
 
-      <div className="quick-questions">
+      <div className={styles.quickQuestions}>
         <button
-          className="quick-question-btn"
+          type="button"
+          className={styles.quickQuestionBtn}
           onClick={() => askQuickQuestion('why')}
         >
           💡 なぜこの改善が必要？
         </button>
         <button
-          className="quick-question-btn"
+          type="button"
+          className={styles.quickQuestionBtn}
           onClick={() => askQuickQuestion('how')}
         >
           🔧 どうやって実装する？
         </button>
         <button
-          className="quick-question-btn"
+          type="button"
+          className={styles.quickQuestionBtn}
           onClick={() => askQuickQuestion('risk')}
         >
           ⚠️ リスクはある？
         </button>
         <button
-          className="quick-question-btn"
+          type="button"
+          className={styles.quickQuestionBtn}
           onClick={() => askQuickQuestion('alternative')}
         >
           🔄 他の方法は？
         </button>
       </div>
 
-      <div className="discussion-messages">
+      <div className={styles.messages}>
         {messages.map((msg, index) => (
-          <div key={index} className={`discussion-message ${msg.type}`}>
-            <div className="sender">{msg.sender}</div>
-            <div className="content">{msg.content}</div>
-            <div className="timestamp">{msg.timestamp}</div>
+          <div
+            key={`${msg.timestamp}-${index}`}
+            className={`${styles.message} ${msg.type === 'user' ? styles.messageUser : styles.messageAgent}`}
+          >
+            <div className={styles.sender}>{msg.sender}</div>
+            <div className={styles.content}>{msg.content}</div>
+            <div className={styles.timestamp}>{msg.timestamp}</div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
 
       {isTyping && (
-        <div className="typing-indicator">AIが回答を生成中です...</div>
+        <div className={styles.typingIndicator}>AIが回答を生成中です...</div>
       )}
 
-      <div className="discussion-input-container">
+      <div className={styles.inputContainer}>
         <textarea
-          className="discussion-input"
+          className={styles.input}
           placeholder="この提案について質問や議論したいことを入力してください..."
           rows={3}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <div className="input-actions">
+        <div className={styles.inputActions}>
           <select
-            className="agent-selector-small"
+            className={styles.agentSelector}
             value={selectedAgent}
             onChange={(e) => setSelectedAgent(e.target.value)}
           >
@@ -117,13 +125,14 @@ export const DiscussionChat: React.FC<DiscussionChatProps> = ({
             <option value="copilot-chat">Copilot</option>
           </select>
           <button
-            className="send-btn"
+            type="button"
+            className={styles.sendBtn}
             onClick={handleSend}
             disabled={!inputValue.trim() || isTyping}
           >
             {isTyping ? (
               <>
-                <span className="loading-spinner"></span>
+                <span className={styles.loadingSpinner}></span>
                 処理中...
               </>
             ) : (
