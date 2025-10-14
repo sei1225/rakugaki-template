@@ -14,6 +14,7 @@ const buildOptions = {
   loader: {
     '.tsx': 'tsx',
     '.ts': 'ts',
+    '.css': 'css',
   },
   define: {
     'process.env.NODE_ENV': watch ? '"development"' : '"production"',
