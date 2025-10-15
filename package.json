@@ -94,9 +94,10 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./ && node esbuild.js",
+    "compile": "tsc -p ./ && npm run build:webview",
+    "build:webview": "vite build",
     "watch": "tsc -watch -p ./",
-    "watch:webview": "node esbuild.js --watch",
+    "watch:webview": "vite build --watch --mode development",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
@@ -106,15 +107,15 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/vscode": "^1.70.0",
     "@types/node": "22.x",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@types/vscode": "^1.70.0",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
-    "esbuild": "^0.25.10",
-    "esbuild-css-modules-plugin": "^3.1.5",
+    "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^8.47.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite": "^7.1.10"
   }
 }
