@@ -1,22 +1,19 @@
 import type React from 'react';
 import appStyles from '../App.module.css';
 import btnStyles from '../common.module.css';
-import type { Suggestion } from '../types';
+import { useVSCodeActions } from '../hooks/useVSCodeActions';
+import { useAppStore } from '../store/useAppStore';
 import styles from './SuggestionDetail.module.css';
 
-interface SuggestionDetailProps {
-  suggestion: Suggestion;
-  onApply: (suggestionId: string) => void;
-  onDismiss: (suggestionId: string) => void;
-  onBack: () => void;
-}
+export const SuggestionDetail: React.FC = () => {
+  // Zustand storeから直接取得
+  const suggestion = useAppStore((state) => state.currentSuggestion);
+  const handleBack = useAppStore((state) => state.handleBack);
 
-export const SuggestionDetail: React.FC<SuggestionDetailProps> = ({
-  suggestion,
-  onApply,
-  onDismiss,
-  onBack,
-}) => {
+  // VSCode通信アクション
+  const { handleApply, handleDismiss } = useVSCodeActions();
+
+  if (!suggestion) return null;
   const getPriorityClass = (priority: string) => {
     switch (priority) {
       case 'high':
@@ -33,7 +30,7 @@ export const SuggestionDetail: React.FC<SuggestionDetailProps> = ({
   return (
     <div>
       <div className={appStyles.header}>
-        <button type="button" className={appStyles.backBtn} onClick={onBack}>
+        <button type="button" className={appStyles.backBtn} onClick={handleBack}>
           ← 戻る
         </button>
         <h3>提案について議論</h3>
@@ -67,7 +64,7 @@ export const SuggestionDetail: React.FC<SuggestionDetailProps> = ({
               <button
                 type="button"
                 className={`${btnStyles.btn} ${btnStyles.btnPrimary}`}
-                onClick={() => onApply(suggestion.id)}
+                onClick={() => handleApply(suggestion.id)}
               >
                 適用
               </button>
@@ -75,7 +72,7 @@ export const SuggestionDetail: React.FC<SuggestionDetailProps> = ({
             <button
               type="button"
               className={`${btnStyles.btn} ${btnStyles.btnSecondary}`}
-              onClick={() => onDismiss(suggestion.id)}
+              onClick={() => handleDismiss(suggestion.id)}
             >
               却下
             </button>

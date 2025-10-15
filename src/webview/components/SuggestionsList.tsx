@@ -1,21 +1,16 @@
 import type React from 'react';
 import btnStyles from '../common.module.css';
-import type { Suggestion } from '../types';
+import { useVSCodeActions } from '../hooks/useVSCodeActions';
+import { useAppStore } from '../store/useAppStore';
 import styles from './SuggestionsList.module.css';
 
-interface SuggestionsListProps {
-  suggestions: Suggestion[];
-  onDiscuss: (suggestion: Suggestion) => void;
-  onApply: (suggestionId: string) => void;
-  onDismiss: (suggestionId: string) => void;
-}
+export const SuggestionsList: React.FC = () => {
+  // Zustand storeから直接取得
+  const suggestions = useAppStore((state) => state.suggestions);
+  const handleDiscuss = useAppStore((state) => state.handleDiscuss);
 
-export const SuggestionsList: React.FC<SuggestionsListProps> = ({
-  suggestions,
-  onDiscuss,
-  onApply,
-  onDismiss,
-}) => {
+  // VSCode通信アクション
+  const { handleApply, handleDismiss } = useVSCodeActions();
   if (suggestions.length === 0) {
     return (
       <div className={styles.emptyState}>
@@ -68,7 +63,7 @@ export const SuggestionsList: React.FC<SuggestionsListProps> = ({
             <button
               type="button"
               className={`${btnStyles.btn} ${btnStyles.btnDiscuss}`}
-              onClick={() => onDiscuss(suggestion)}
+              onClick={() => handleDiscuss(suggestion)}
             >
               💬 議論する
             </button>
@@ -76,7 +71,7 @@ export const SuggestionsList: React.FC<SuggestionsListProps> = ({
               <button
                 type="button"
                 className={`${btnStyles.btn} ${btnStyles.btnPrimary}`}
-                onClick={() => onApply(suggestion.id)}
+                onClick={() => handleApply(suggestion.id)}
               >
                 適用
               </button>
@@ -84,7 +79,7 @@ export const SuggestionsList: React.FC<SuggestionsListProps> = ({
             <button
               type="button"
               className={`${btnStyles.btn} ${btnStyles.btnSecondary}`}
-              onClick={() => onDismiss(suggestion.id)}
+              onClick={() => handleDismiss(suggestion.id)}
             >
               却下
             </button>

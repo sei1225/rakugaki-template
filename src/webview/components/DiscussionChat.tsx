@@ -1,24 +1,26 @@
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import type { DiscussionMessage, Suggestion } from '../types';
+import { useVSCodeActions } from '../hooks/useVSCodeActions';
+import { useAppStore } from '../store/useAppStore';
 import styles from './DiscussionChat.module.css';
 
-interface DiscussionChatProps {
-  suggestion: Suggestion;
-  messages: DiscussionMessage[];
-  isTyping: boolean;
-  onSendMessage: (message: string, agent: string) => void;
-}
-
-export const DiscussionChat: React.FC<DiscussionChatProps> = ({
-  suggestion,
-  messages,
-  isTyping,
-  onSendMessage,
-}) => {
+export const DiscussionChat: React.FC = () => {
+  // Hooks must be called before any conditional returns
   const [inputValue, setInputValue] = useState('');
   const [selectedAgent, setSelectedAgent] = useState('auto');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Zustand storeから直接取得
+  const currentSuggestion = useAppStore((state) => state.currentSuggestion);
+  const discussionHistory = useAppStore((state) => state.discussionHistory);
+  const isTyping = useAppStore((state) => state.isTyping);
+
+  // VSCode通信アクション
+  const { handleSendMessage } = useVSCodeActions();
+
+  if (!currentSuggestion) return null;
+
+  const messages = discussionHistory[currentSuggestion.id] || [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,7 +28,7 @@ export const DiscussionChat: React.FC<DiscussionChatProps> = ({
 
   const handleSend = () => {
     if (inputValue.trim()) {
-      onSendMessage(inputValue, selectedAgent);
+      handleSendMessage(inputValue, selectedAgent);
       setInputValue('');
     }
   };
@@ -40,10 +42,10 @@ export const DiscussionChat: React.FC<DiscussionChatProps> = ({
 
   const askQuickQuestion = (type: string) => {
     const questions: Record<string, string> = {
-      why: `なぜ「${suggestion.title}」という改善が必要なのですか？現在のコードの何が問題なのでしょうか？`,
-      how: `「${suggestion.title}」はどのように実装すればよいですか？具体的な手順を教えてください。`,
-      risk: `「${suggestion.title}」を適用することによるリスクや副作用はありますか？`,
-      alternative: `「${suggestion.title}」以外に、他にどのような改善方法がありますか？`,
+      why: `なぜ「${currentSuggestion.title}」という改善が必要なのですか？現在のコードの何が問題なのでしょうか？`,
+      how: `「${currentSuggestion.title}」はどのように実装すればよいですか？具体的な手順を教えてください。`,
+      risk: `「${currentSuggestion.title}」を適用することによるリスクや副作用はありますか？`,
+      alternative: `「${currentSuggestion.title}」以外に、他にどのような改善方法がありますか？`,
     };
 
     const question = questions[type];
